@@ -57,13 +57,12 @@ const QuestionSlider = ({ questions, onClose, showMeta = true }) => {
     }),
   [questions, selectedYear, selectedDifficulty]);
 
-  // Merge localStorage edits on top of filtered list
-  const filteredMerged = useMemo(() =>
-    filtered.map((q) => {
-      if (!q._uid || !edits[q._uid]) return q;
-      return { ...q, ...edits[q._uid], _edited: true };
-    }),
-  [filtered, edits]);
+  // Merge localStorage edits on top of filtered list — computed directly (no memo)
+  // so it always reflects the latest edits state immediately after save
+  const filteredMerged = filtered.map((q) => {
+    if (!q._uid || !edits[q._uid]) return q;
+    return { ...q, ...edits[q._uid], _edited: true };
+  });
 
   const question = filteredMerged[currentIndex];
 
