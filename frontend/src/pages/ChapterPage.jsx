@@ -28,9 +28,18 @@ const ChapterPage = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [drawerQuestions, setDrawerQuestions] = useState([]);
 
-  const allQuestions = chapter
-    ? chapter.sections.flatMap((s) => s.questions)
+  // Stamp every question with a stable unique ID for localStorage edits
+  const sectionsWithUids = chapter
+    ? chapter.sections.map((s) => ({
+        ...s,
+        questions: s.questions.map((q) => ({
+          ...q,
+          _uid: `physics_ch${chapterId}_q${q.question_no}`,
+        })),
+      }))
     : [];
+
+  const allQuestions = sectionsWithUids.flatMap((s) => s.questions);
 
   const openDrawer = (questions) => {
     if (questions.length > 0) {
@@ -112,7 +121,7 @@ const ChapterPage = () => {
           </div>
 
           <div className="space-y-2">
-            {chapter.sections.map((section, idx) => {
+            {sectionsWithUids.map((section, idx) => {
               const counts = { Easy: 0, Medium: 0, Hard: 0 };
               section.questions.forEach((q) => {
                 counts[q.difficulty] = (counts[q.difficulty] || 0) + 1;

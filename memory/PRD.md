@@ -59,9 +59,13 @@ Build a mobile-first Exam App MVP based on wireframes containing Home, Exams, Ex
 - [x] Ch 4: Laws of Motion — 22 questions, 5 topics
 - [x] Ch 5: Work, Energy and Power — 18 questions, 5 topics
 
-#### Diagram Image Support
-- [x] QuestionSlider.jsx renders image when question.image_path is set (max-h-64, object-contain)
-- [x] Ch 3 Q5 (v-t graph), Q6 (x-t angles), Q7 (x-t positive accel), Q8 (v-t + a-t piecewise) — all have real diagram images
+#### Edit Questions Feature
+- [x] ✏️ pencil edit button on every question in the drawer (always visible)
+- [x] Edit mode: textarea for question, option inputs with letter-tap correct-answer selector, explanation textarea
+- [x] Save stores patch in localStorage (`phys_edits_v1`) — "Edited" amber badge shown after saving
+- [x] Cancel discards draft; Reset removes edit and reverts to original base question
+- [x] Edits persist across page refresh via localStorage; original data files are never modified
+- [x] `useQuestionEdits` hook at `/src/hooks/useQuestionEdits.js`; UIDs auto-generated as `physics_ch{n}_q{m}`
 
 ---
 
