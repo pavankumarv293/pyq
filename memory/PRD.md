@@ -55,7 +55,7 @@ Build a mobile-first Exam App MVP based on wireframes containing Home, Exams, Ex
 #### NEET Physics PYQ Bank (153 questions across 5 chapters)
 - [x] Ch 1: Units and Measurements — 52 questions, 6 topics
 - [x] Ch 2: Motion in a Straight Line — 20 questions, 5 topics
-- [x] Ch 3: Motion in a Plane — 41 questions, 7 topics (with diagram images for graph Qs)
+- [x] Ch 3: Motion in a Plane — 18 questions, 3 topics (Vectors & Scalars, Projectile Motion, Circular Motion)
 - [x] Ch 4: Laws of Motion — 22 questions, 5 topics
 - [x] Ch 5: Work, Energy and Power — 18 questions, 5 topics
 
