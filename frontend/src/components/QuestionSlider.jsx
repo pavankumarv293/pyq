@@ -23,7 +23,7 @@ const difficultyConfig = {
   Hard: { bg: "bg-red-50", text: "text-red-700", border: "border-red-200", dot: "bg-red-500" },
 };
 
-const QuestionSlider = ({ questions, onClose }) => {
+const QuestionSlider = ({ questions, onClose, showMeta = true }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(0);
   const [selectedOption, setSelectedOption] = useState(null);
@@ -104,12 +104,16 @@ const QuestionSlider = ({ questions, onClose }) => {
           <span className="text-xs text-gray-400">of {questions.length}</span>
         </div>
         <div className="flex items-center gap-2">
-          <Badge className={`text-[10px] px-2 py-0.5 border ${diff.bg} ${diff.text} ${diff.border}`}>
-            {question.difficulty}
-          </Badge>
-          <Badge variant="secondary" className="text-[10px] px-2 py-0.5 bg-gray-100 text-gray-500 border-0">
-            {question.year}
-          </Badge>
+          {showMeta && (
+            <Badge className={`text-[10px] px-2 py-0.5 border ${diff.bg} ${diff.text} ${diff.border}`}>
+              {question.difficulty}
+            </Badge>
+          )}
+          {showMeta && (
+            <Badge variant="secondary" className="text-[10px] px-2 py-0.5 bg-gray-100 text-gray-500 border-0">
+              {question.year}
+            </Badge>
+          )}
         </div>
       </div>
 
@@ -259,7 +263,8 @@ const QuestionSlider = ({ questions, onClose }) => {
                   <p className="text-xs text-gray-700 leading-relaxed">{question.explanation}</p>
                 </div>
 
-                {/* Tags row */}
+                {/* Tags row — Ch1 only */}
+                {showMeta && (
                 <div className="flex items-center gap-2 flex-wrap">
                   <div className="flex items-center gap-1">
                     <Tag size={11} className="text-gray-400" />
@@ -267,12 +272,15 @@ const QuestionSlider = ({ questions, onClose }) => {
                   </div>
                   <span className="text-[10px] text-gray-600">{question.approach}</span>
                 </div>
+                )}
+                {showMeta && (
                 <div className="flex items-center gap-1.5">
                   <Tag size={11} className="text-purple-400" />
                   <Badge variant="secondary" className="text-[9px] px-1.5 py-0.5 bg-purple-50 text-purple-600 border-0">
                     {question.similarity_tag}
                   </Badge>
                 </div>
+                )}
 
                 {/* Hint in answer (concepts + formulas) */}
                 <div className="p-3 rounded-xl bg-blue-50/50 border border-blue-100 space-y-2">

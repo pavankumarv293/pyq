@@ -33,6 +33,7 @@ const ChapterPage = () => {
   const navigate = useNavigate();
   const { id, subject, chapterId } = useParams();
   const chapter = getPhysicsChapter(chapterId);
+  const isChapter1 = chapterId === "1";
 
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [drawerQuestions, setDrawerQuestions] = useState([]);
@@ -131,16 +132,19 @@ const ChapterPage = () => {
                   <p className="text-lg font-bold text-white">{chapter.total_questions}</p>
                   <p className="text-[9px] text-indigo-200 uppercase">Total</p>
                 </div>
+                {isChapter1 && (
                 <div className="text-center">
                   <p className="text-lg font-bold text-white">{totalFiltered}</p>
                   <p className="text-[9px] text-indigo-200 uppercase">Filtered</p>
                 </div>
+                )}
               </div>
             </div>
           </CardContent>
         </Card>
 
-        {/* Difficulty Filter */}
+        {/* Difficulty Filter — Ch1 only */}
+        {isChapter1 && (
         <div>
           <div className="flex items-center gap-1.5 mb-2.5">
             <Filter size={13} className="text-gray-400" />
@@ -162,8 +166,10 @@ const ChapterPage = () => {
             ))}
           </div>
         </div>
+        )}
 
-        {/* Year Filter */}
+        {/* Year Filter — Ch1 only */}
+        {isChapter1 && (
         <div>
           <div className="flex items-center gap-1.5 mb-2.5">
             <Hash size={13} className="text-gray-400" />
@@ -187,6 +193,7 @@ const ChapterPage = () => {
             </div>
           </ScrollArea>
         </div>
+        )}
 
         {/* Practice All Button */}
         {totalFiltered > 0 && (
@@ -278,6 +285,7 @@ const ChapterPage = () => {
           <QuestionSlider
             questions={drawerQuestions}
             onClose={() => setDrawerOpen(false)}
+            showMeta={isChapter1}
           />
         </DrawerContent>
       </Drawer>
