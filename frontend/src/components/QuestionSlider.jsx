@@ -254,16 +254,16 @@ const QuestionSlider = ({ questions, onClose, showMeta = true }) => {
 
           {/* ── Edit Mode Form ── */}
           {editMode && draft ? (
-            <ScrollArea className="flex-1 min-h-0">
+            <div className="flex-1 min-h-0 overflow-y-auto">
               <div className="px-4 py-3 space-y-4">
                 {/* Question */}
                 <div>
                   <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wide mb-1.5">Question</p>
                   <textarea
                     value={draft.question}
-                    onChange={(e) => setDraft((d) => ({ ...d, question: e.target.value }))}
+                    onChange={(e) => setDraft({ ...draft, question: e.target.value })}
                     rows={4}
-                    className="w-full text-sm text-gray-800 border border-gray-200 rounded-xl p-3 resize-none focus:outline-none focus:ring-2 focus:ring-indigo-200 leading-relaxed"
+                    className="w-full text-sm text-gray-800 border border-gray-200 rounded-xl p-3 resize-y focus:outline-none focus:ring-2 focus:ring-indigo-200 leading-relaxed"
                   />
                 </div>
 
@@ -277,7 +277,7 @@ const QuestionSlider = ({ questions, onClose, showMeta = true }) => {
                       <div key={key} className="flex items-center gap-2">
                         <button
                           data-testid={`edit-option-correct-${key}`}
-                          onClick={() => setDraft((d) => ({ ...d, answer: key }))}
+                          onClick={() => setDraft({ ...draft, answer: key })}
                           className={`w-7 h-7 rounded-full border-2 flex items-center justify-center flex-shrink-0 text-[11px] font-bold transition-all duration-150 ${
                             draft.answer === key
                               ? "bg-emerald-500 border-emerald-500 text-white"
@@ -290,7 +290,7 @@ const QuestionSlider = ({ questions, onClose, showMeta = true }) => {
                           data-testid={`edit-option-input-${key}`}
                           value={draft.options[key] || ""}
                           onChange={(e) =>
-                            setDraft((d) => ({ ...d, options: { ...d.options, [key]: e.target.value } }))
+                            setDraft({ ...draft, options: { ...draft.options, [key]: e.target.value } })
                           }
                           className="flex-1 text-sm text-gray-700 border border-gray-200 rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-200"
                           placeholder={`Option ${key.toUpperCase()}`}
@@ -306,9 +306,9 @@ const QuestionSlider = ({ questions, onClose, showMeta = true }) => {
                   <textarea
                     data-testid="edit-explanation-input"
                     value={draft.explanation}
-                    onChange={(e) => setDraft((d) => ({ ...d, explanation: e.target.value }))}
+                    onChange={(e) => setDraft({ ...draft, explanation: e.target.value })}
                     rows={3}
-                    className="w-full text-sm text-gray-700 border border-gray-200 rounded-xl p-3 resize-none focus:outline-none focus:ring-2 focus:ring-indigo-200 leading-relaxed"
+                    className="w-full text-sm text-gray-700 border border-gray-200 rounded-xl p-3 resize-y focus:outline-none focus:ring-2 focus:ring-indigo-200 leading-relaxed"
                   />
                 </div>
 
@@ -339,7 +339,7 @@ const QuestionSlider = ({ questions, onClose, showMeta = true }) => {
                   </button>
                 </div>
               </div>
-            </ScrollArea>
+            </div>
           ) : (
             /* ── Normal Question View ── */
             <ScrollArea className="flex-1 min-h-0">
