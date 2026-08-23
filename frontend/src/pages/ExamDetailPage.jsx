@@ -138,7 +138,7 @@ const ExamDetailPage = () => {
                   <button
                     onClick={() => {
                       if (hasChapterData) {
-                        navigate(`/exams/${id}/${subject.id}/1`);
+                        navigate(`/exams/${id}/${subject.id}`);
                       } else {
                         setExpandedSubject(expandedSubject === subject.id ? null : subject.id);
                       }

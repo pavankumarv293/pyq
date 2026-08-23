@@ -11,7 +11,7 @@ import {
   DrawerDescription,
 } from "../components/ui/drawer";
 import QuestionSlider from "../components/QuestionSlider";
-import { physicsChapter1 } from "../data/physicsData";
+import { getPhysicsChapter } from "../data/physicsIndex";
 import {
   ArrowLeft,
   Atom,
@@ -31,8 +31,8 @@ const diffColors = {
 
 const ChapterPage = () => {
   const navigate = useNavigate();
-  const { id } = useParams();
-  const chapter = physicsChapter1;
+  const { id, subject, chapterId } = useParams();
+  const chapter = getPhysicsChapter(chapterId);
 
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [drawerQuestions, setDrawerQuestions] = useState([]);
@@ -41,7 +41,7 @@ const ChapterPage = () => {
 
   // All questions flat
   const allQuestions = useMemo(() =>
-    chapter.sections.flatMap((s) => s.questions), [chapter]);
+    chapter ? chapter.sections.flatMap((s) => s.questions) : [], [chapter]);
 
   // Unique years
   const years = useMemo(() => {
@@ -61,9 +61,11 @@ const ChapterPage = () => {
 
   // Sections with filtered questions
   const filteredSections = useMemo(() =>
-    chapter.sections
-      .map((s) => ({ ...s, filteredQuestions: applyFilters(s.questions) }))
-      .filter((s) => s.filteredQuestions.length > 0),
+    chapter
+      ? chapter.sections
+          .map((s) => ({ ...s, filteredQuestions: applyFilters(s.questions) }))
+          .filter((s) => s.filteredQuestions.length > 0)
+      : [],
     [chapter, selectedYear, selectedDifficulty]
   );
 
@@ -79,13 +81,26 @@ const ChapterPage = () => {
     }
   };
 
+  if (!chapter) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center pb-24">
+        <div className="text-center">
+          <p className="text-sm text-gray-400">Chapter not found</p>
+          <button onClick={() => navigate(`/exams/${id}/${subject}`)} className="mt-2 text-xs text-indigo-600 font-medium hover:underline">
+            Back to chapters
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 pb-24">
       {/* Header */}
       <div className="bg-white sticky top-0 z-40 border-b border-gray-100">
         <div className="max-w-lg mx-auto px-5 py-4 flex items-center gap-3">
           <button
-            onClick={() => navigate(`/exams/${id}`)}
+            onClick={() => navigate(`/exams/${id}/${subject}`)}
             className="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center hover:bg-gray-100 transition-colors"
           >
             <ArrowLeft size={16} className="text-gray-600" />
