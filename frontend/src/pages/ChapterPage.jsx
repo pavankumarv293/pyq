@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Badge } from "../components/ui/badge";
 import { Card, CardContent } from "../components/ui/card";
 import { ScrollArea } from "../components/ui/scroll-area";
@@ -17,6 +17,7 @@ import {
 
 const ChapterPage = () => {
   const navigate = useNavigate();
+  const { id } = useParams();
   const [expandedTopic, setExpandedTopic] = useState(null);
   const chapter = physicsChapter1;
 
@@ -34,7 +35,7 @@ const ChapterPage = () => {
       <div className="bg-white sticky top-0 z-40 border-b border-gray-100">
         <div className="max-w-lg mx-auto px-5 py-4 flex items-center gap-3">
           <button
-            onClick={() => navigate("/exams/3")}
+            onClick={() => navigate(`/exams/${id}`)}
             className="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center hover:bg-gray-100 transition-colors"
           >
             <ArrowLeft size={16} className="text-gray-600" />

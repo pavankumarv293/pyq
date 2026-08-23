@@ -77,7 +77,7 @@ export const examsList = [
   {
     id: 5,
     name: "NEET",
-    status: "coming_soon",
+    status: "available",
     description: "National Eligibility cum Entrance Test",
     color: "#DC2626",
   },
@@ -137,6 +137,99 @@ export const jeeMainsDetail = {
     totalMarks: 300,
     totalQuestions: 75,
   },
+};
+
+export const neetDetail = {
+  name: "NEET",
+  importance: {
+    title: "Exam Importance.pdf",
+    size: "100-200 KB",
+    description: "Understand why NEET is the gateway to top medical colleges in India.",
+  },
+  conductedBy: "National Testing Agency (NTA)",
+  dateTime: "May 2027 (Expected)",
+  admissionCutoff: {
+    general: "720-650 marks",
+    obc: "650-600 marks",
+    sc_st: "600-550 marks",
+    topColleges: "690+ for AIIMS/JIPMER",
+  },
+  subjects: [
+    {
+      id: "physics",
+      name: "Physics",
+      icon: "⚡",
+      color: "#4F46E5",
+      chapters: 20,
+      totalQuestions: 45,
+      marks: 180,
+    },
+    {
+      id: "chemistry",
+      name: "Chemistry",
+      icon: "🧪",
+      color: "#059669",
+      chapters: 25,
+      totalQuestions: 45,
+      marks: 180,
+    },
+    {
+      id: "botany",
+      name: "Botany",
+      icon: "🌿",
+      color: "#16A34A",
+      chapters: 16,
+      totalQuestions: 45,
+      marks: 180,
+    },
+    {
+      id: "zoology",
+      name: "Zoology",
+      icon: "🧬",
+      color: "#DC2626",
+      chapters: 15,
+      totalQuestions: 45,
+      marks: 180,
+    },
+  ],
+  pyqs: {
+    years: [2026, 2025, 2024, 2023, 2022, 2021, 2020],
+    totalPapers: 20,
+  },
+  fullPaperTest: {
+    totalTests: 10,
+    duration: "3 hours 20 min",
+    totalMarks: 720,
+    totalQuestions: 180,
+  },
+};
+
+export const neetSyllabusData = {
+  physics: [
+    { chapter: "Mechanics", weightage: 25, completed: 70 },
+    { chapter: "Electrodynamics", weightage: 20, completed: 55 },
+    { chapter: "Optics", weightage: 15, completed: 45 },
+    { chapter: "Modern Physics", weightage: 15, completed: 25 },
+    { chapter: "Thermodynamics", weightage: 10, completed: 60 },
+    { chapter: "Waves & Oscillations", weightage: 15, completed: 40 },
+  ],
+  chemistry: [
+    { chapter: "Physical Chemistry", weightage: 30, completed: 50 },
+    { chapter: "Organic Chemistry", weightage: 35, completed: 40 },
+    { chapter: "Inorganic Chemistry", weightage: 35, completed: 35 },
+  ],
+  botany: [
+    { chapter: "Plant Diversity", weightage: 20, completed: 65 },
+    { chapter: "Cell Biology & Genetics", weightage: 25, completed: 55 },
+    { chapter: "Plant Physiology", weightage: 25, completed: 40 },
+    { chapter: "Ecology & Environment", weightage: 30, completed: 30 },
+  ],
+  zoology: [
+    { chapter: "Animal Diversity", weightage: 20, completed: 60 },
+    { chapter: "Human Physiology", weightage: 35, completed: 50 },
+    { chapter: "Reproduction & Genetics", weightage: 25, completed: 35 },
+    { chapter: "Evolution & Biotechnology", weightage: 20, completed: 20 },
+  ],
 };
 
 export const userProfile = {
