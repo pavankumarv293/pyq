@@ -18,7 +18,16 @@ import {
   Filter,
   Play,
   Hash,
+  ChevronRight,
+  BookOpen,
 } from "lucide-react";
+
+const diffColors = {
+  All:    { active: "bg-indigo-600 text-white",  inactive: "bg-gray-100 text-gray-600" },
+  Easy:   { active: "bg-emerald-600 text-white", inactive: "bg-emerald-50 text-emerald-700" },
+  Medium: { active: "bg-amber-600 text-white",   inactive: "bg-amber-50 text-amber-700" },
+  Hard:   { active: "bg-red-600 text-white",     inactive: "bg-red-50 text-red-700" },
+};
 
 const ChapterPage = () => {
   const navigate = useNavigate();
@@ -26,13 +35,13 @@ const ChapterPage = () => {
   const chapter = physicsChapter1;
 
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [drawerQuestions, setDrawerQuestions] = useState([]);
   const [selectedYear, setSelectedYear] = useState("All");
   const [selectedDifficulty, setSelectedDifficulty] = useState("All");
 
-  // Gather all questions flat
-  const allQuestions = useMemo(() => {
-    return chapter.sections.flatMap((s) => s.questions);
-  }, [chapter]);
+  // All questions flat
+  const allQuestions = useMemo(() =>
+    chapter.sections.flatMap((s) => s.questions), [chapter]);
 
   // Unique years
   const years = useMemo(() => {
@@ -40,35 +49,32 @@ const ChapterPage = () => {
     return ["All", ...Array.from(ySet).sort().reverse()];
   }, [allQuestions]);
 
-  // Difficulty levels
   const difficulties = ["All", "Easy", "Medium", "Hard"];
 
-  // Filtered questions
-  const filteredQuestions = useMemo(() => {
-    return allQuestions.filter((q) => {
+  // Filter helper
+  const applyFilters = (questions) =>
+    questions.filter((q) => {
       const yearMatch = selectedYear === "All" || q.year === selectedYear;
       const diffMatch = selectedDifficulty === "All" || q.difficulty === selectedDifficulty;
       return yearMatch && diffMatch;
     });
-  }, [allQuestions, selectedYear, selectedDifficulty]);
 
-  const diffCounts = useMemo(() => {
-    const counts = { All: allQuestions.length, Easy: 0, Medium: 0, Hard: 0 };
-    allQuestions.forEach((q) => {
-      counts[q.difficulty] = (counts[q.difficulty] || 0) + 1;
-    });
-    return counts;
-  }, [allQuestions]);
+  // Sections with filtered questions
+  const filteredSections = useMemo(() =>
+    chapter.sections
+      .map((s) => ({ ...s, filteredQuestions: applyFilters(s.questions) }))
+      .filter((s) => s.filteredQuestions.length > 0),
+    [chapter, selectedYear, selectedDifficulty]
+  );
 
-  const diffColors = {
-    All: { active: "bg-indigo-600 text-white", inactive: "bg-gray-100 text-gray-600" },
-    Easy: { active: "bg-emerald-600 text-white", inactive: "bg-emerald-50 text-emerald-700" },
-    Medium: { active: "bg-amber-600 text-white", inactive: "bg-amber-50 text-amber-700" },
-    Hard: { active: "bg-red-600 text-white", inactive: "bg-red-50 text-red-700" },
-  };
+  const totalFiltered = useMemo(() =>
+    filteredSections.reduce((sum, s) => sum + s.filteredQuestions.length, 0),
+    [filteredSections]
+  );
 
-  const handleStartPractice = () => {
-    if (filteredQuestions.length > 0) {
+  const openDrawer = (questions) => {
+    if (questions.length > 0) {
+      setDrawerQuestions(questions);
       setDrawerOpen(true);
     }
   };
@@ -111,7 +117,7 @@ const ChapterPage = () => {
                   <p className="text-[9px] text-indigo-200 uppercase">Total</p>
                 </div>
                 <div className="text-center">
-                  <p className="text-lg font-bold text-white">{filteredQuestions.length}</p>
+                  <p className="text-lg font-bold text-white">{totalFiltered}</p>
                   <p className="text-[9px] text-indigo-200 uppercase">Filtered</p>
                 </div>
               </div>
@@ -137,7 +143,6 @@ const ChapterPage = () => {
                 }`}
               >
                 {d}
-                <span className="ml-1 opacity-70">({diffCounts[d] || 0})</span>
               </button>
             ))}
           </div>
@@ -168,81 +173,84 @@ const ChapterPage = () => {
           </ScrollArea>
         </div>
 
-        {/* Filtered Questions Preview */}
-        <Card className="border-0 shadow-sm overflow-hidden">
-          <CardContent className="p-4">
-            {filteredQuestions.length > 0 ? (
-              <>
-                <div className="flex items-center justify-between mb-3">
-                  <p className="text-sm font-semibold text-gray-800">
-                    {filteredQuestions.length} Question{filteredQuestions.length !== 1 ? "s" : ""} Found
-                  </p>
-                  <div className="flex gap-1.5">
-                    {["Easy", "Medium", "Hard"].map((d) => {
-                      const count = filteredQuestions.filter((q) => q.difficulty === d).length;
-                      if (count === 0) return null;
-                      const color = d === "Easy" ? "bg-emerald-500" : d === "Medium" ? "bg-amber-500" : "bg-red-500";
-                      return (
-                        <div key={d} className="flex items-center gap-1">
-                          <div className={`w-1.5 h-1.5 rounded-full ${color}`} />
-                          <span className="text-[10px] text-gray-400">{count}</span>
+        {/* Practice All Button */}
+        {totalFiltered > 0 && (
+          <button
+            onClick={() => openDrawer(applyFilters(allQuestions))}
+            className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-indigo-600 text-white text-sm font-semibold hover:bg-indigo-700 active:scale-[0.98] transition-all duration-200 shadow-sm"
+          >
+            <Play size={15} fill="white" />
+            Practice All ({totalFiltered} Questions)
+          </button>
+        )}
+
+        {/* Topic-wise Sections */}
+        <div>
+          <div className="flex items-center gap-1.5 mb-2.5">
+            <BookOpen size={13} className="text-gray-400" />
+            <span className="text-[11px] font-semibold text-gray-500 uppercase tracking-wide">Topics</span>
+          </div>
+
+          {filteredSections.length > 0 ? (
+            <div className="space-y-2">
+              {filteredSections.map((section, idx) => {
+                const counts = { Easy: 0, Medium: 0, Hard: 0 };
+                section.filteredQuestions.forEach((q) => { counts[q.difficulty] = (counts[q.difficulty] || 0) + 1; });
+                return (
+                  <Card
+                    key={idx}
+                    className="border-0 shadow-sm overflow-hidden cursor-pointer hover:shadow-md active:scale-[0.98] transition-all duration-200"
+                    onClick={() => openDrawer(section.filteredQuestions)}
+                  >
+                    <CardContent className="p-4">
+                      <div className="flex items-center gap-3">
+                        {/* Topic number bubble */}
+                        <div className="w-9 h-9 rounded-full bg-indigo-50 flex items-center justify-center flex-shrink-0">
+                          <span className="text-xs font-bold text-indigo-600">{idx + 1}</span>
                         </div>
-                      );
-                    })}
-                  </div>
-                </div>
 
-                {/* Question previews - show first 5 */}
-                <div className="space-y-2 mb-3">
-                  {filteredQuestions.slice(0, 5).map((q, i) => {
-                    const dc = diffColors[q.difficulty];
-                    return (
-                      <div
-                        key={q.question_no}
-                        className="flex items-start gap-2.5 p-2.5 rounded-lg bg-gray-50 cursor-pointer hover:bg-gray-100 transition-colors"
-                        onClick={handleStartPractice}
-                      >
-                        <span className="text-[10px] font-bold text-indigo-600 bg-indigo-50 px-1.5 py-0.5 rounded mt-0.5 flex-shrink-0">
-                          Q{q.question_no}
-                        </span>
-                        <p className="text-xs text-gray-600 leading-relaxed line-clamp-2 flex-1">
-                          {q.question}
-                        </p>
-                        <Badge className={`text-[8px] px-1.5 py-0 ${diffColors[q.difficulty].inactive} border-0 flex-shrink-0 mt-0.5`}>
-                          {q.difficulty}
-                        </Badge>
+                        {/* Topic info */}
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-semibold text-gray-800 leading-tight">{section.topic}</p>
+                          <div className="flex items-center gap-2 mt-1">
+                            <span className="text-[11px] text-gray-400">
+                              {section.filteredQuestions.length} question{section.filteredQuestions.length !== 1 ? "s" : ""}
+                            </span>
+                            <div className="flex gap-1.5">
+                              {["Easy", "Medium", "Hard"].map((d) => {
+                                if (!counts[d]) return null;
+                                const color = d === "Easy" ? "bg-emerald-500" : d === "Medium" ? "bg-amber-500" : "bg-red-500";
+                                return (
+                                  <div key={d} className="flex items-center gap-0.5">
+                                    <div className={`w-1.5 h-1.5 rounded-full ${color}`} />
+                                    <span className="text-[10px] text-gray-400">{counts[d]}</span>
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Arrow */}
+                        <ChevronRight size={16} className="text-gray-300 flex-shrink-0" />
                       </div>
-                    );
-                  })}
-                  {filteredQuestions.length > 5 && (
-                    <p className="text-[11px] text-gray-400 text-center pt-1">
-                      +{filteredQuestions.length - 5} more questions
-                    </p>
-                  )}
-                </div>
-
-                {/* Start Practice Button */}
-                <button
-                  onClick={handleStartPractice}
-                  className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-indigo-600 text-white text-sm font-semibold hover:bg-indigo-700 active:scale-[0.98] transition-all duration-200 shadow-sm"
-                >
-                  <Play size={15} fill="white" />
-                  Start Practice ({filteredQuestions.length} Qs)
-                </button>
-              </>
-            ) : (
-              <div className="text-center py-8">
-                <p className="text-sm text-gray-400">No questions match your filters</p>
-                <button
-                  onClick={() => { setSelectedYear("All"); setSelectedDifficulty("All"); }}
-                  className="mt-2 text-xs text-indigo-600 font-medium hover:underline"
-                >
-                  Clear all filters
-                </button>
-              </div>
-            )}
-          </CardContent>
-        </Card>
+                    </CardContent>
+                  </Card>
+                );
+              })}
+            </div>
+          ) : (
+            <div className="text-center py-8">
+              <p className="text-sm text-gray-400">No questions match your filters</p>
+              <button
+                onClick={() => { setSelectedYear("All"); setSelectedDifficulty("All"); }}
+                className="mt-2 text-xs text-indigo-600 font-medium hover:underline"
+              >
+                Clear all filters
+              </button>
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Question Drawer */}
@@ -253,7 +261,7 @@ const ChapterPage = () => {
             <DrawerDescription>Solve physics questions one by one</DrawerDescription>
           </DrawerHeader>
           <QuestionSlider
-            questions={filteredQuestions}
+            questions={drawerQuestions}
             onClose={() => setDrawerOpen(false)}
           />
         </DrawerContent>

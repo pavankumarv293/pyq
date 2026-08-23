@@ -63,7 +63,7 @@ export const examsList = [
   {
     id: 3,
     name: "JEE Main's",
-    status: "available",
+    status: "coming_soon",
     description: "Joint Entrance Examination - Main",
     color: "#4F46E5",
   },
