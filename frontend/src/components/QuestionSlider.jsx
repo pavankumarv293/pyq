@@ -355,7 +355,7 @@ const QuestionSlider = ({ questions, onClose, showMeta = true }) => {
                   className="px-4 pb-4"
                 >
                   {/* Question text */}
-                  <p className="text-sm text-gray-800 leading-relaxed font-medium py-3">
+                  <p className="text-sm text-gray-800 leading-relaxed font-medium py-3 whitespace-pre-wrap">
                     {question.question}
                   </p>
 
@@ -474,7 +474,7 @@ const QuestionSlider = ({ questions, onClose, showMeta = true }) => {
                           <Lightbulb size={12} className="text-amber-500" />
                           <span className="text-[10px] font-semibold text-gray-500 uppercase tracking-wide">Explanation</span>
                         </div>
-                        <p className="text-xs text-gray-700 leading-relaxed">{question.explanation}</p>
+                        <p className="text-xs text-gray-700 leading-relaxed whitespace-pre-wrap">{question.explanation}</p>
                       </div>
 
                       {showMeta && (
