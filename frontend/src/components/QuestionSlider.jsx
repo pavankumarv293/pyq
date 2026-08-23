@@ -206,6 +206,17 @@ const QuestionSlider = ({ questions, onClose, showMeta = true }) => {
                   {question.question}
                 </p>
 
+                {/* Diagram image */}
+                {question.image_path && (
+                  <div className="mb-3 rounded-xl overflow-hidden border border-gray-200 bg-gray-50">
+                    <img
+                      src={question.image_path}
+                      alt="Question diagram"
+                      className="w-full object-contain max-h-64"
+                    />
+                  </div>
+                )}
+
                 {/* Options */}
                 <div className="space-y-2 mb-3">
                   {["a", "b", "c", "d"].map((key) => {
