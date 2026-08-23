@@ -121,11 +121,17 @@ const ExamDetailPage = () => {
           <CardContent className="px-4 pb-4 space-y-2">
             {exam.subjects.map((subject) => {
               const Icon = subjectIcons[subject.id];
-              const isExpanded = expandedSubject === subject.id;
+              const hasChapterData = subject.id === "physics";
               return (
                 <div key={subject.id}>
                   <button
-                    onClick={() => setExpandedSubject(isExpanded ? null : subject.id)}
+                    onClick={() => {
+                      if (hasChapterData) {
+                        navigate(`/exams/3/${subject.id}/1`);
+                      } else {
+                        setExpandedSubject(expandedSubject === subject.id ? null : subject.id);
+                      }
+                    }}
                     className="w-full flex items-center justify-between py-3 px-3.5 rounded-xl bg-gray-50 hover:bg-gray-100 transition-all duration-200"
                   >
                     <div className="flex items-center gap-3">
@@ -142,12 +148,12 @@ const ExamDetailPage = () => {
                     </div>
                     <ChevronRight
                       size={14}
-                      className={`text-gray-400 transition-transform duration-200 ${isExpanded ? "rotate-90" : ""}`}
+                      className="text-gray-400 transition-transform duration-200"
                     />
                   </button>
 
-                  {/* Expanded syllabus */}
-                  {isExpanded && syllabusData[subject.id] && (
+                  {/* Expanded syllabus for non-physics subjects */}
+                  {expandedSubject === subject.id && !hasChapterData && syllabusData[subject.id] && (
                     <div className="mt-2 ml-4 mr-2 space-y-2.5 animate-in slide-in-from-top-2 duration-200">
                       {syllabusData[subject.id].map((chapter, idx) => (
                         <div key={idx} className="space-y-1">
