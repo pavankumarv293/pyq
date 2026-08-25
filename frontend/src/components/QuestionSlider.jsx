@@ -254,8 +254,9 @@ const QuestionSlider = ({ questions, onClose, showMeta = true }) => {
 
           {/* ── Edit Mode Form ── */}
           {editMode && draft ? (
-            <div className="flex-1 min-h-0 overflow-y-auto">
-              <div className="px-4 py-3 space-y-4">
+            <div className="flex-1 flex flex-col min-h-0">
+              {/* Scrollable inputs */}
+              <div className="flex-1 overflow-y-auto px-4 py-3 space-y-4">
                 {/* Question */}
                 <div>
                   <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wide mb-1.5">Question</p>
@@ -311,33 +312,33 @@ const QuestionSlider = ({ questions, onClose, showMeta = true }) => {
                     className="w-full text-sm text-gray-700 border border-gray-200 rounded-xl p-3 resize-y focus:outline-none focus:ring-2 focus:ring-indigo-200 leading-relaxed"
                   />
                 </div>
+              </div>
 
-                {/* Action buttons */}
-                <div className="flex gap-2 pb-2">
-                  {question._edited && (
-                    <button
-                      data-testid="edit-reset-btn"
-                      onClick={handleReset}
-                      className="py-2.5 px-3 rounded-xl bg-red-50 text-red-600 text-xs font-semibold hover:bg-red-100 transition-colors"
-                    >
-                      Reset
-                    </button>
-                  )}
+              {/* ── Sticky action bar — always above keyboard ── */}
+              <div className="flex-shrink-0 flex gap-2 px-4 py-3 border-t border-gray-100 bg-white">
+                {question._edited && (
                   <button
-                    data-testid="edit-cancel-btn"
-                    onClick={handleCancel}
-                    className="flex-1 py-2.5 rounded-xl bg-gray-100 text-gray-600 text-xs font-medium hover:bg-gray-200 transition-colors"
+                    data-testid="edit-reset-btn"
+                    onClick={handleReset}
+                    className="py-3 px-4 rounded-xl bg-red-50 text-red-600 text-xs font-semibold active:bg-red-100 transition-colors"
                   >
-                    Cancel
+                    Reset
                   </button>
-                  <button
-                    data-testid="edit-save-btn"
-                    onClick={handleSave}
-                    className="flex-1 py-2.5 rounded-xl bg-indigo-600 text-white text-xs font-semibold hover:bg-indigo-700 transition-colors active:scale-95"
-                  >
-                    Save
-                  </button>
-                </div>
+                )}
+                <button
+                  data-testid="edit-cancel-btn"
+                  onClick={handleCancel}
+                  className="flex-1 py-3 rounded-xl bg-gray-100 text-gray-600 text-sm font-medium active:bg-gray-200 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  data-testid="edit-save-btn"
+                  onClick={handleSave}
+                  className="flex-1 py-3 rounded-xl bg-indigo-600 text-white text-sm font-semibold active:bg-indigo-700 transition-colors active:scale-95"
+                >
+                  Save
+                </button>
               </div>
             </div>
           ) : (
